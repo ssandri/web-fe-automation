@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 
 public class ProductDetailsPage extends BasePage {
 
+  private final By addProductBtnBy = By.cssSelector("a.btn");
+
   public ProductDetailsPage(WebDriver driver) {
 
     super(driver);
@@ -14,7 +16,7 @@ public class ProductDetailsPage extends BasePage {
 
   public void addProductToCart() {
 
-    driver.findElement(By.cssSelector("a.btn")).click();
+    driver.findElement(addProductBtnBy).click();
     this.acceptAlert();
   }
 
