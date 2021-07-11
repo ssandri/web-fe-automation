@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
-public class HomeSteps {
+public class StoreSteps {
 
   private ChromeDriver driver;
   private String cartTotalCost;
@@ -153,7 +153,7 @@ public class HomeSteps {
     softAssert.assertAll();
 
     driver.findElement(By.cssSelector("button.confirm")).click();
-    
+
     System.out.println("Purchase id: " + orderConfirmationMap.get("Id"));
     System.out.println("Order total cost: " + orderConfirmationMap.get("Amount"));
   }
