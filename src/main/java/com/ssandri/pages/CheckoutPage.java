@@ -11,6 +11,17 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutPage extends BasePage {
 
+  private final By nameTxtBy = By.id("name");
+  private final By countryTxtBy = By.id("country");
+  private final By cityTxtBy = By.id("city");
+  private final By cardNumberTxtBy = By.id("card");
+  private final By cardMonthTxtBy = By.id("month");
+  private final By cardYearTxtBy = By.id("year");
+  private final By placeOrderBtnBy = By.cssSelector("button[onclick='purchaseOrder()']");
+  private final By orderConfirmationMsgBy = By.cssSelector("div.sweet-alert");
+  private final By confirmationMsgTxtBy = By.cssSelector("p.lead");
+  private final By closeBtnBy = By.cssSelector("button.confirm");
+
   public CheckoutPage(WebDriver driver) {
 
     super(driver);
@@ -18,27 +29,27 @@ public class CheckoutPage extends BasePage {
 
   public void completeCostumerInfo(CostumerInfo costumerInfo) {
 
-    driver.findElement(By.id("name")).sendKeys(costumerInfo.getName());
-    driver.findElement(By.id("country")).sendKeys(costumerInfo.getCountry());
-    driver.findElement(By.id("city")).sendKeys(costumerInfo.getCity());
-    driver.findElement(By.id("card")).sendKeys(costumerInfo.getCreditCardInfo().getNumber());
-    driver.findElement(By.id("month")).sendKeys(costumerInfo.getCreditCardInfo().getExpirationMonth());
-    driver.findElement(By.id("year")).sendKeys(costumerInfo.getCreditCardInfo().getExpirationYear());
+    driver.findElement(nameTxtBy).sendKeys(costumerInfo.getName());
+    driver.findElement(countryTxtBy).sendKeys(costumerInfo.getCountry());
+    driver.findElement(cityTxtBy).sendKeys(costumerInfo.getCity());
+    driver.findElement(cardNumberTxtBy).sendKeys(costumerInfo.getCreditCardInfo().getNumber());
+    driver.findElement(cardMonthTxtBy).sendKeys(costumerInfo.getCreditCardInfo().getExpirationMonth());
+    driver.findElement(cardYearTxtBy).sendKeys(costumerInfo.getCreditCardInfo().getExpirationYear());
   }
 
   public void placeOrder() {
 
-    driver.findElement(By.cssSelector("button[onclick='purchaseOrder()']")).click();
+    driver.findElement(placeOrderBtnBy).click();
   }
 
   public boolean isOrderConfirmationMsgDisplayed() {
 
-    return driver.findElement(By.cssSelector("div.sweet-alert")).isDisplayed();
+    return driver.findElement(orderConfirmationMsgBy).isDisplayed();
   }
 
   public OrderInfo getConfirmationMessage() {
 
-    String orderConfirmationText = driver.findElement(By.cssSelector("p.lead")).getText();
+    String orderConfirmationText = driver.findElement(confirmationMsgTxtBy).getText();
     Map<String, String> orderConfirmationMap = stream(orderConfirmationText.split(System.lineSeparator()))
         .map(s -> s.split(": "))
         .collect(Collectors.toMap(e -> e[0], e -> e[1]));
@@ -53,6 +64,6 @@ public class CheckoutPage extends BasePage {
 
   public void closeConfirmationMessage() {
 
-    driver.findElement(By.cssSelector("button.confirm")).click();
+    driver.findElement(closeBtnBy).click();
   }
 }
