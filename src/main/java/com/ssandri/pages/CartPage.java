@@ -3,34 +3,48 @@ package com.ssandri.pages;
 import static java.lang.String.format;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class CartPage extends BasePage {
 
-  private final By cartMenuBy = By.linkText("Cart");
-  private final By productRowBy = By.className("success");
+  @FindBy(linkText = "Cart")
+  private WebElement cartMenu;
+
+  @FindBy(css = "tr.success")
+  private List<WebElement> productRows;
+
   private final By deleteLinkBy = By.linkText("Delete");
-  private final By totalCostTxtBy = By.id("totalp");
-  private final By proceedToCheckoutBtnBy = By.cssSelector("button[data-target='#orderModal']");
-  private final By checkoutModalBy = By.cssSelector("#orderModal");
+
+  @FindBy(id = "totalp")
+  private WebElement totalCostTxt;
+
+  @FindBy(css = "button[data-target='#orderModal']")
+  private WebElement proceedToCheckoutBtn;
+
+  @FindBy(css = "#orderModal")
+  private WebElement checkoutModal;
 
   public CartPage(WebDriver driver) {
 
     super(driver);
+    PageFactory.initElements(driver, this);
   }
 
   public void open() {
 
-    driver.findElement(cartMenuBy).click();
+    cartMenu.click();
     super.waitForPageToLoad();
   }
 
   public void removeProduct(String productName) {
 
-    WebElement productInCart = driver.findElements(productRowBy)
+    WebElement productInCart = productRows
         .stream()
         .filter(webElement -> webElement.getText().contains(productName))
         .findFirst()
@@ -43,13 +57,13 @@ public class CartPage extends BasePage {
 
   public String getTotalCost() {
 
-    return driver.findElement(totalCostTxtBy).getText();
+    return totalCostTxt.getText();
   }
 
   public void proceedToCheckout() {
-    
-    driver.findElement(proceedToCheckoutBtnBy).click();
-    super.wait.until(visibilityOf(driver.findElement(checkoutModalBy)));
+
+    proceedToCheckoutBtn.click();
+    super.wait.until(visibilityOf(checkoutModal));
   }
 
 }

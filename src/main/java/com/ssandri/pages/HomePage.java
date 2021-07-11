@@ -4,30 +4,37 @@ import static java.lang.String.format;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends BasePage {
 
-  private final By homeMenuBy = By.cssSelector("a[href='index.html']");
-  private final By productCategoryBy = By.id("itemc");
-  private final By productTitleBy = By.cssSelector("h4.card-title");
+  @FindBy(css = "a[href='index.html']")
+  private WebElement homeMenu;
+
+  @FindBy(id = "itemc")
+  private List<WebElement> productCategoryList;
+
+  @FindBy(css = "h4.card-title")
+  private List<WebElement> productTitleList;
 
   public HomePage(WebDriver driver) {
 
     super(driver);
+    PageFactory.initElements(driver, this);
   }
 
   public void open() {
 
-    driver.findElement(homeMenuBy).click();
+    homeMenu.click();
   }
 
   public void openProductCategory(String categoryName) {
 
-    driver.findElements(productCategoryBy).stream()
+    productCategoryList.stream()
         .filter(e -> e.getText().equalsIgnoreCase(categoryName)).findFirst().orElseThrow(
         () -> new NoSuchElementException(format("Cannot locate a category named '%s'", categoryName)))
         .click();
@@ -36,7 +43,7 @@ public class HomePage extends BasePage {
 
   public void openProductDetailsPage(String productName) {
 
-    driver.findElements(productTitleBy).stream()
+    productTitleList.stream()
         .filter(webElement -> webElement.getText().equalsIgnoreCase(productName)).findFirst()
         .orElseThrow(() -> new NoSuchElementException(
             format("Cannot locate a product named '%s' in product list.", productName))).click();
@@ -46,7 +53,7 @@ public class HomePage extends BasePage {
 
   public List<String> getProductList() {
 
-    return driver.findElements(productTitleBy)
+    return productTitleList
         .stream()
         .map(WebElement::getText)
         .collect(Collectors.toList());
