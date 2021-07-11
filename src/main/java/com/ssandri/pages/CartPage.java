@@ -10,6 +10,13 @@ import org.openqa.selenium.WebElement;
 
 public class CartPage extends BasePage {
 
+  private final By cartMenuBy = By.linkText("Cart");
+  private final By productRowBy = By.className("success");
+  private final By deleteLinkBy = By.linkText("Delete");
+  private final By totalCostTxtBy = By.id("totalp");
+  private final By proceedtoCheckoutBtnBy = By.cssSelector("button[data-target='#orderModal']");
+  private final By checkoutModalBy = By.cssSelector("#orderModal");
+
   public CartPage(WebDriver driver) {
 
     super(driver);
@@ -17,32 +24,32 @@ public class CartPage extends BasePage {
 
   public void open() {
 
-    driver.findElement(By.linkText("Cart")).click();
+    driver.findElement(cartMenuBy).click();
     super.waitForPageToLoad();
   }
 
   public void removeProduct(String productName) {
 
-    WebElement productInCart = driver.findElements(By.className("success"))
+    WebElement productInCart = driver.findElements(productRowBy)
         .stream()
         .filter(webElement -> webElement.getText().contains(productName))
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException(
             format("Cannot locate a product named '%s' in cart.", productName)));
-    productInCart.findElement(By.linkText("Delete")).click();
+    productInCart.findElement(deleteLinkBy).click();
 
     super.waitForPageToLoad();
   }
 
   public String getTotalCost() {
 
-    return driver.findElement(By.id("totalp")).getText();
+    return driver.findElement(totalCostTxtBy).getText();
   }
 
   public void proceedToCheckout() {
 
-    driver.findElement(By.cssSelector("button[data-target='#orderModal']")).click();
-    super.wait.until(visibilityOf(driver.findElement(By.cssSelector("#orderModal"))));
+    driver.findElement(proceedtoCheckoutBtnBy).click();
+    super.wait.until(visibilityOf(driver.findElement(checkoutModalBy)));
   }
 
 }
