@@ -2,6 +2,7 @@ package com.ssandri.stepdefinitions;
 
 import com.ssandri.dto.CostumerInfo;
 import com.ssandri.dto.CreditCardInfo;
+import com.ssandri.dto.OrderInfo;
 import com.ssandri.pages.CartPage;
 import com.ssandri.pages.CheckoutPage;
 import com.ssandri.pages.HomePage;
@@ -104,18 +105,18 @@ public class StoreSteps {
   public void theOrderShouldBeCreatedWithTheSameCostThatWasDisplayedInTheCart() {
 
     SoftAssert softAssert = new SoftAssert();
-    ;
+    
     softAssert.assertTrue(checkoutPage.isOrderConfirmationMsgDisplayed());
 
-    Map<String, String> orderConfirmationMap = checkoutPage.getConfirmationMessage();
+    OrderInfo orderInfo = checkoutPage.getConfirmationMessage();
 
-    softAssert.assertTrue(orderConfirmationMap.get("Amount").contains(cartTotalCost));
+    softAssert.assertTrue(orderInfo.getAmount().contains(cartTotalCost));
     softAssert.assertAll();
 
     checkoutPage.closeConfirmationMessage();
 
-    System.out.println("Purchase id: " + orderConfirmationMap.get("Id"));
-    System.out.println("Order total cost: " + orderConfirmationMap.get("Amount"));
+    System.out.println("Purchase id: " + orderInfo.getId());
+    System.out.println("Order total cost: " + orderInfo.getAmount());
   }
 
   @After

@@ -1,7 +1,9 @@
 package com.ssandri.pages;
 
+import static java.util.Arrays.stream;
+
 import com.ssandri.dto.CostumerInfo;
-import java.util.Arrays;
+import com.ssandri.dto.OrderInfo;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
@@ -34,11 +36,19 @@ public class CheckoutPage extends BasePage {
     return driver.findElement(By.cssSelector("div.sweet-alert")).isDisplayed();
   }
 
-  public Map<String, String> getConfirmationMessage() {
+  public OrderInfo getConfirmationMessage() {
 
     String orderConfirmationText = driver.findElement(By.cssSelector("p.lead")).getText();
-    return Arrays.stream(orderConfirmationText.split(System.lineSeparator())).map(s -> s.split(": "))
+    Map<String, String> orderConfirmationMap = stream(orderConfirmationText.split(System.lineSeparator()))
+        .map(s -> s.split(": "))
         .collect(Collectors.toMap(e -> e[0], e -> e[1]));
+
+    return new OrderInfo(
+        orderConfirmationMap.get("Id"),
+        orderConfirmationMap.get("Amount"),
+        orderConfirmationMap.get("Card Number"),
+        orderConfirmationMap.get("Name"),
+        orderConfirmationMap.get("Date"));
   }
 
   public void closeConfirmationMessage() {
