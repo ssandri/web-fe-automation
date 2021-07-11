@@ -1,11 +1,11 @@
 package com.ssandri.stepdefinitions;
 
+import com.ssandri.dto.CostumerInfo;
+import com.ssandri.dto.CreditCardInfo;
 import com.ssandri.pages.CartPage;
 import com.ssandri.pages.CheckoutPage;
 import com.ssandri.pages.HomePage;
 import com.ssandri.pages.ProductDetailsPage;
-import com.ssandri.stepdefinitions.parameters.CostumerInfo;
-import com.ssandri.stepdefinitions.parameters.CreditCardInfo;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.DataTableType;
@@ -82,12 +82,7 @@ public class StoreSteps {
 
     cartPage.proceedToCheckout();
     checkoutPage = new CheckoutPage(driver);
-    checkoutPage.setCostumerName(costumerInfo.getName());
-    checkoutPage.setCostumerCountry(costumerInfo.getCountry());
-    checkoutPage.setCostumerCity(costumerInfo.getCity());
-    checkoutPage.setCostumerCardNumber(costumerInfo.getCreditCardInfo().getNumber());
-    checkoutPage.setCostumerCardExpirationMonth(costumerInfo.getCreditCardInfo().getExpirationMonth());
-    checkoutPage.setCostumerCardExpirationYear(costumerInfo.getCreditCardInfo().getExpirationYear());
+    checkoutPage.completeCostumerInfo(costumerInfo);
     checkoutPage.placeOrder();
   }
 

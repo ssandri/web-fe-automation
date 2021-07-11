@@ -1,5 +1,6 @@
 package com.ssandri.pages;
 
+import com.ssandri.dto.CostumerInfo;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,34 +14,14 @@ public class CheckoutPage extends BasePage {
     super(driver);
   }
 
-  public void setCostumerName(String costumerName) {
+  public void completeCostumerInfo(CostumerInfo costumerInfo) {
 
-    driver.findElement(By.id("name")).sendKeys(costumerName);
-  }
-
-  public void setCostumerCountry(String costumerCountry) {
-
-    driver.findElement(By.id("country")).sendKeys(costumerCountry);
-  }
-
-  public void setCostumerCity(String costumerCity) {
-
-    driver.findElement(By.id("city")).sendKeys(costumerCity);
-  }
-
-  public void setCostumerCardNumber(String cardNumber) {
-
-    driver.findElement(By.id("card")).sendKeys(cardNumber);
-  }
-
-  public void setCostumerCardExpirationMonth(String cardExpirationMonth) {
-
-    driver.findElement(By.id("month")).sendKeys(cardExpirationMonth);
-  }
-
-  public void setCostumerCardExpirationYear(String cardExpirationYear) {
-
-    driver.findElement(By.id("year")).sendKeys(cardExpirationYear);
+    driver.findElement(By.id("name")).sendKeys(costumerInfo.getName());
+    driver.findElement(By.id("country")).sendKeys(costumerInfo.getCountry());
+    driver.findElement(By.id("city")).sendKeys(costumerInfo.getCity());
+    driver.findElement(By.id("card")).sendKeys(costumerInfo.getCreditCardInfo().getNumber());
+    driver.findElement(By.id("month")).sendKeys(costumerInfo.getCreditCardInfo().getExpirationMonth());
+    driver.findElement(By.id("year")).sendKeys(costumerInfo.getCreditCardInfo().getExpirationYear());
   }
 
   public void placeOrder() {

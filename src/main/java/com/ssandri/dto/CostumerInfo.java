@@ -1,4 +1,4 @@
-package com.ssandri.stepdefinitions.parameters;
+package com.ssandri.dto;
 
 public class CostumerInfo {
 
