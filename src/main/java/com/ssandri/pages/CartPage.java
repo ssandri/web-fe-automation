@@ -14,7 +14,7 @@ public class CartPage extends BasePage {
   private final By productRowBy = By.className("success");
   private final By deleteLinkBy = By.linkText("Delete");
   private final By totalCostTxtBy = By.id("totalp");
-  private final By proceedtoCheckoutBtnBy = By.cssSelector("button[data-target='#orderModal']");
+  private final By proceedToCheckoutBtnBy = By.cssSelector("button[data-target='#orderModal']");
   private final By checkoutModalBy = By.cssSelector("#orderModal");
 
   public CartPage(WebDriver driver) {
@@ -47,8 +47,8 @@ public class CartPage extends BasePage {
   }
 
   public void proceedToCheckout() {
-
-    driver.findElement(proceedtoCheckoutBtnBy).click();
+    
+    driver.findElement(proceedToCheckoutBtnBy).click();
     super.wait.until(visibilityOf(driver.findElement(checkoutModalBy)));
   }
 
