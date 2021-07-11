@@ -11,6 +11,10 @@ import org.openqa.selenium.WebElement;
 
 public class HomePage extends BasePage {
 
+  private final By homeMenuBy = By.cssSelector("a[href='index.html']");
+  private final By productCategoryBy = By.id("itemc");
+  private final By productTitleBy = By.cssSelector("h4.card-title");
+
   public HomePage(WebDriver driver) {
 
     super(driver);
@@ -18,12 +22,12 @@ public class HomePage extends BasePage {
 
   public void open() {
 
-    driver.findElement(By.cssSelector("a[href='index.html']")).click();
+    driver.findElement(homeMenuBy).click();
   }
 
   public void openProductCategory(String categoryName) {
 
-    driver.findElements(By.id("itemc")).stream()
+    driver.findElements(productCategoryBy).stream()
         .filter(e -> e.getText().equalsIgnoreCase(categoryName)).findFirst().orElseThrow(
         () -> new NoSuchElementException(format("Cannot locate a category named '%s'", categoryName)))
         .click();
@@ -32,7 +36,7 @@ public class HomePage extends BasePage {
 
   public void openProductDetailsPage(String productName) {
 
-    driver.findElements(By.cssSelector("h4.card-title")).stream()
+    driver.findElements(productTitleBy).stream()
         .filter(webElement -> webElement.getText().equalsIgnoreCase(productName)).findFirst()
         .orElseThrow(() -> new NoSuchElementException(
             format("Cannot locate a product named '%s' in product list.", productName))).click();
@@ -42,7 +46,7 @@ public class HomePage extends BasePage {
 
   public List<String> getProductList() {
 
-    return driver.findElements(By.cssSelector("h4.card-title"))
+    return driver.findElements(productTitleBy)
         .stream()
         .map(WebElement::getText)
         .collect(Collectors.toList());
