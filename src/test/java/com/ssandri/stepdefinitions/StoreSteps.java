@@ -4,8 +4,12 @@ import com.ssandri.pages.CartPage;
 import com.ssandri.pages.CheckoutPage;
 import com.ssandri.pages.HomePage;
 import com.ssandri.pages.ProductDetailsPage;
+import com.ssandri.stepdefinitions.parameters.CostumerInfo;
+import com.ssandri.stepdefinitions.parameters.CreditCardInfo;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.DataTableType;
+import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
@@ -57,7 +61,7 @@ public class StoreSteps {
 
   @But("they decided to remove the product {string} from the cart")
   public void theyDecidedToRemoveTheProductFromTheCart(String productName) {
-    
+
     cartPage = new CartPage(driver);
     cartPage.open();
     cartPage.removeProduct(productName);
@@ -73,17 +77,17 @@ public class StoreSteps {
     homePage.openProductCategory(categoryName);
   }
 
-  @When("they complete the checkout process")
-  public void theyCompleteTheCheckoutProcess() {
+  @When("they complete the checkout process with the following info")
+  public void theyCompleteTheCheckoutProcessWithTheFollowingInfo(@Transpose CostumerInfo costumerInfo) {
 
     cartPage.proceedToCheckout();
     checkoutPage = new CheckoutPage(driver);
-    checkoutPage.setCostumerName("asd");
-    checkoutPage.setCostumerCountry("asd");
-    checkoutPage.setCostumerCity("asd");
-    checkoutPage.setCostumerCardNumber("asd");
-    checkoutPage.setCostumerCardExpirationMonth("asd");
-    checkoutPage.setCostumerCardExpirationYear("asd");
+    checkoutPage.setCostumerName(costumerInfo.getName());
+    checkoutPage.setCostumerCountry(costumerInfo.getCountry());
+    checkoutPage.setCostumerCity(costumerInfo.getCity());
+    checkoutPage.setCostumerCardNumber(costumerInfo.getCreditCardInfo().getNumber());
+    checkoutPage.setCostumerCardExpirationMonth(costumerInfo.getCreditCardInfo().getExpirationMonth());
+    checkoutPage.setCostumerCardExpirationYear(costumerInfo.getCreditCardInfo().getExpirationYear());
     checkoutPage.placeOrder();
   }
 
@@ -124,4 +128,12 @@ public class StoreSteps {
 
     driver.close();
   }
+
+  @DataTableType
+  public CostumerInfo getConsumerInfo(Map<String, String> entry) {
+
+    return new CostumerInfo(entry.get("name"), entry.get("country"), entry.get("city"),
+        new CreditCardInfo(entry.get("cardNumber"), entry.get("cardExpirationMonth"), entry.get("cardExpirationYear")));
+  }
+
 }
