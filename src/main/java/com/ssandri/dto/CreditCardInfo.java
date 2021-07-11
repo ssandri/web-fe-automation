@@ -2,9 +2,9 @@ package com.ssandri.dto;
 
 public class CreditCardInfo {
 
-  private String number;
-  private String expirationMonth;
-  private String expirationYear;
+  private final String number;
+  private final String expirationMonth;
+  private final String expirationYear;
 
   public CreditCardInfo(String number, String expirationMonth, String expirationYear) {
 

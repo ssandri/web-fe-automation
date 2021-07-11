@@ -2,10 +2,10 @@ package com.ssandri.dto;
 
 public class CostumerInfo {
 
-  private String name;
-  private String country;
-  private String city;
-  private CreditCardInfo creditCardInfo;
+  private final String name;
+  private final String country;
+  private final String city;
+  private final CreditCardInfo creditCardInfo;
 
   public CostumerInfo(String name, String country, String city,
       CreditCardInfo creditCardInfo) {
