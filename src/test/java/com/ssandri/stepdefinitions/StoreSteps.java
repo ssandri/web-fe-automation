@@ -1,5 +1,9 @@
 package com.ssandri.stepdefinitions;
 
+import com.ssandri.pages.CartPage;
+import com.ssandri.pages.CheckoutPage;
+import com.ssandri.pages.HomePage;
+import com.ssandri.pages.ProductDetailsPage;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -8,24 +12,19 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 public class StoreSteps {
 
   private ChromeDriver driver;
   private String cartTotalCost;
+  private HomePage homePage;
+  private ProductDetailsPage productDetailsPage;
+  private CartPage cartPage;
+  private CheckoutPage checkoutPage;
 
   @Before
   public void setupScenarios() {
@@ -45,49 +44,24 @@ public class StoreSteps {
   @And("they added the following products to the cart")
   public void theyAddedTheFollowingProductsToTheCart(List<Map<String, String>> productMapList) {
 
+    homePage = new HomePage(driver);
+    productDetailsPage = new ProductDetailsPage(driver);
     productMapList.forEach(productMap -> {
-      driver.findElement(By.cssSelector("a[href='index.html']")).click();
-      driver.findElements(By.id("itemc")).stream()
-          .filter(e -> e.getText().equalsIgnoreCase(productMap.get("Category"))).findFirst().orElseThrow(
-          () -> new NoSuchElementException(
-              String.format("Cannot locate a category named '%s'", productMap.get("Category"))))
-          .click();
-
-      //ExpectedCondition<Boolean> jsLoad = driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").toString().equals("complete");
-      ExpectedCondition<Boolean> jQueryLoad = driver -> (
-          (Long) ((JavascriptExecutor) driver).executeScript("return jQuery.active") == 0);
-
-      //new WebDriverWait(driver, 5).until(jsLoad);
-      new WebDriverWait(driver, 5).until(jQueryLoad);
-
-      driver.findElements(By.cssSelector("h4.card-title")).stream()
-          .filter(webElement -> webElement.getText().equalsIgnoreCase(productMap.get("Product"))).findFirst()
-          .orElseThrow(() -> new NoSuchElementException(
-              String.format("Cannot locate a product named '%s' in product list.", productMap.get("Product")))).click();
-
-      new WebDriverWait(driver, 5).until(jQueryLoad);
-      driver.findElement(By.cssSelector("a.btn")).click();
-      new WebDriverWait(driver, 5).until(ExpectedConditions.alertIsPresent());
-      driver.switchTo().alert().accept();
-      driver.switchTo().defaultContent();
+      homePage.open();
+      homePage.openProductCategory(productMap.get("Category"));
+      homePage.openProductDetailsPage(productMap.get("Product"));
+      productDetailsPage.addProductToCart();
     });
 
   }
 
   @But("they decided to remove the product {string} from the cart")
   public void theyDecidedToRemoveTheProductFromTheCart(String productName) {
-
-    ExpectedCondition<Boolean> jQueryLoad = driver -> (
-        (Long) ((JavascriptExecutor) driver).executeScript("return jQuery.active") == 0);
-    driver.findElement(By.linkText("Cart")).click();
-    new WebDriverWait(driver, 5).until(jQueryLoad);
-    WebElement productInCart = driver.findElements(By.className("success")).stream()
-        .filter(webElement -> webElement.getText().contains(productName)).findFirst()
-        .orElseThrow(() -> new NoSuchElementException(
-            String.format("Cannot locate a product named '%s' in cart.", productName)));
-    productInCart.findElement(By.linkText("Delete")).click();
-    new WebDriverWait(driver, 5).until(jQueryLoad);
-    cartTotalCost = driver.findElement(By.id("totalp")).getText();
+    
+    cartPage = new CartPage(driver);
+    cartPage.open();
+    cartPage.removeProduct(productName);
+    cartTotalCost = cartPage.getTotalCost();
   }
 
   // WHEN STEPS
@@ -95,32 +69,22 @@ public class StoreSteps {
   @When("they select the {string} category")
   public void theySelectTheCategory(String categoryName) {
 
-    driver.findElements(By.id("itemc")).stream()
-        .filter(e -> e.getText().equalsIgnoreCase(categoryName)).findFirst().orElseThrow(
-        () -> new NoSuchElementException(String.format("Cannot locate a category named '%s'", categoryName)))
-        .click();
-
-    //ExpectedCondition<Boolean> jsLoad = driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").toString().equals("complete");
-    ExpectedCondition<Boolean> jQueryLoad = driver -> (
-        (Long) ((JavascriptExecutor) driver).executeScript("return jQuery.active") == 0);
-
-    //new WebDriverWait(driver, 5).until(jsLoad);
-    new WebDriverWait(driver, 5).until(jQueryLoad);
+    homePage = new HomePage(driver);
+    homePage.openProductCategory(categoryName);
   }
 
   @When("they complete the checkout process")
   public void theyCompleteTheCheckoutProcess() {
 
-    driver.findElement(By.cssSelector("button[data-target='#orderModal']")).click();
-    new WebDriverWait(driver, 5)
-        .until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#orderModal"))));
-    driver.findElement(By.id("name")).sendKeys("asd");
-    driver.findElement(By.id("country")).sendKeys("asd");
-    driver.findElement(By.id("city")).sendKeys("asd");
-    driver.findElement(By.id("card")).sendKeys("asd");
-    driver.findElement(By.id("month")).sendKeys("asd");
-    driver.findElement(By.id("year")).sendKeys("asd");
-    driver.findElement(By.cssSelector("button[onclick='purchaseOrder()']")).click();
+    cartPage.proceedToCheckout();
+    checkoutPage = new CheckoutPage(driver);
+    checkoutPage.setCostumerName("asd");
+    checkoutPage.setCostumerCountry("asd");
+    checkoutPage.setCostumerCity("asd");
+    checkoutPage.setCostumerCardNumber("asd");
+    checkoutPage.setCostumerCardExpirationMonth("asd");
+    checkoutPage.setCostumerCardExpirationYear("asd");
+    checkoutPage.placeOrder();
   }
 
   // THEN STEPS
@@ -129,9 +93,7 @@ public class StoreSteps {
   public void theFollowingProductsShouldBeListedInThePage(List<String> productList) {
 
     SoftAssert softAssert = new SoftAssert();
-    List<String> actualProductList = driver.findElements(By.cssSelector("h4.card-title")).stream()
-        .map(WebElement::getText)
-        .collect(Collectors.toList());
+    List<String> actualProductList = homePage.getProductList();
 
     productList.forEach(product -> softAssert
         .assertTrue(actualProductList.contains(product), "Product validation failed. Expected product ["
@@ -143,16 +105,15 @@ public class StoreSteps {
   public void theOrderShouldBeCreatedWithTheSameCostThatWasDisplayedInTheCart() {
 
     SoftAssert softAssert = new SoftAssert();
-    softAssert.assertTrue(driver.findElement(By.cssSelector("div.sweet-alert")).isDisplayed());
+    ;
+    softAssert.assertTrue(checkoutPage.isOrderConfirmationMsgDisplayed());
 
-    String orderConfirmationText = driver.findElement(By.cssSelector("p.lead")).getText();
-    Map<String, String> orderConfirmationMap = Arrays.stream(orderConfirmationText.split(System.lineSeparator()))
-        .map(s -> s.split(": ")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
+    Map<String, String> orderConfirmationMap = checkoutPage.getConfirmationMessage();
 
     softAssert.assertTrue(orderConfirmationMap.get("Amount").contains(cartTotalCost));
     softAssert.assertAll();
 
-    driver.findElement(By.cssSelector("button.confirm")).click();
+    checkoutPage.closeConfirmationMessage();
 
     System.out.println("Purchase id: " + orderConfirmationMap.get("Id"));
     System.out.println("Order total cost: " + orderConfirmationMap.get("Amount"));
