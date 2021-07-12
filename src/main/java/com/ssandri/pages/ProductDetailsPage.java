@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class ProductDetailsPage extends BasePage {
-  
+
   @FindBy(css = "a.btn")
   private WebElement addProductBtn;
 
@@ -27,7 +27,9 @@ public class ProductDetailsPage extends BasePage {
   private void acceptAlert() {
 
     super.wait.until(alertIsPresent());
+    LOGGER.info("Product added to cart.");
     driver.switchTo().alert().accept();
+    LOGGER.info("Product added alert closed.");
     driver.switchTo().defaultContent();
   }
 }

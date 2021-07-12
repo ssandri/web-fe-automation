@@ -40,6 +40,7 @@ public class CartPage extends BasePage {
 
     cartMenu.click();
     super.waitForPageToLoad();
+    LOGGER.info("Cart page successfully loaded.");
   }
 
   public void removeProduct(String productName) {
@@ -50,9 +51,10 @@ public class CartPage extends BasePage {
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException(
             format("Cannot locate a product named '%s' in cart.", productName)));
+    LOGGER.info("Product '{}' found in cart page.", productName);
     productInCart.findElement(deleteLinkBy).click();
-
     super.waitForPageToLoad();
+    LOGGER.info("Product '{}' deleted from cart page.", productName);
   }
 
   public String getTotalCost() {
@@ -64,6 +66,7 @@ public class CartPage extends BasePage {
 
     proceedToCheckoutBtn.click();
     super.wait.until(visibilityOf(checkoutModal));
+    LOGGER.info("Checkout page loaded.");
   }
 
 }

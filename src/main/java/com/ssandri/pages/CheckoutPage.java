@@ -57,11 +57,13 @@ public class CheckoutPage extends BasePage {
     cardNumberTxt.sendKeys(costumerInfo.getCreditCardInfo().getNumber());
     cardMonthTxt.sendKeys(costumerInfo.getCreditCardInfo().getExpirationMonth());
     cardYearTxt.sendKeys(costumerInfo.getCreditCardInfo().getExpirationYear());
+    LOGGER.info("Completed costumer information at checkout page.");
   }
 
   public void placeOrder() {
 
     placeOrderBtn.click();
+    LOGGER.info("Order placed at checkout page.");
   }
 
   public boolean isOrderConfirmationMsgDisplayed() {
@@ -76,16 +78,22 @@ public class CheckoutPage extends BasePage {
         .map(s -> s.split(": "))
         .collect(Collectors.toMap(e -> e[0], e -> e[1]));
 
-    return new OrderInfo(
+    OrderInfo orderInfo = new OrderInfo(
         orderConfirmationMap.get("Id"),
         orderConfirmationMap.get("Amount"),
         orderConfirmationMap.get("Card Number"),
         orderConfirmationMap.get("Name"),
         orderConfirmationMap.get("Date"));
+
+    LOGGER.info("Purchase id: '{}' ", orderInfo.getId());
+    LOGGER.info("Order total cost: '{}'", orderInfo.getAmount());
+
+    return orderInfo;
   }
 
   public void closeConfirmationMessage() {
 
     closeBtn.click();
+    LOGGER.info("Order confirmation message closed at checkout page.");
   }
 }

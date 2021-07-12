@@ -105,7 +105,7 @@ public class StoreSteps {
   public void theOrderShouldBeCreatedWithTheSameCostThatWasDisplayedInTheCart() {
 
     SoftAssert softAssert = new SoftAssert();
-    
+
     softAssert.assertTrue(checkoutPage.isOrderConfirmationMsgDisplayed());
 
     OrderInfo orderInfo = checkoutPage.getConfirmationMessage();
@@ -114,9 +114,6 @@ public class StoreSteps {
     softAssert.assertAll();
 
     checkoutPage.closeConfirmationMessage();
-
-    System.out.println("Purchase id: " + orderInfo.getId());
-    System.out.println("Order total cost: " + orderInfo.getAmount());
   }
 
   @After

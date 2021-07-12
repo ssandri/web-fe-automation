@@ -23,6 +23,9 @@ dependencies {
     testImplementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     testImplementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'org.slf4j:slf4j-api:1.7.31'
 }
 
 testlogger {

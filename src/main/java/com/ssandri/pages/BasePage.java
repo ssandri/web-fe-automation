@@ -5,11 +5,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BasePage {
 
   protected final WebDriver driver;
   final WebDriverWait wait;
+  protected static final Logger LOGGER = LoggerFactory.getLogger("web-fe-automation");
 
   public BasePage(WebDriver driver) {
 

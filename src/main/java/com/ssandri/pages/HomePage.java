@@ -30,6 +30,7 @@ public class HomePage extends BasePage {
   public void open() {
 
     homeMenu.click();
+    LOGGER.info("Home page successfully loaded.");
   }
 
   public void openProductCategory(String categoryName) {
@@ -39,6 +40,7 @@ public class HomePage extends BasePage {
         () -> new NoSuchElementException(format("Cannot locate a category named '%s'", categoryName)))
         .click();
     super.waitForPageToLoad();
+    LOGGER.info("Category '{}' found and product list successfully loaded.", categoryName);
   }
 
   public void openProductDetailsPage(String productName) {
@@ -49,6 +51,8 @@ public class HomePage extends BasePage {
             format("Cannot locate a product named '%s' in product list.", productName))).click();
 
     super.waitForPageToLoad();
+
+    LOGGER.info("Product '{}' page successfully loaded.", productName);
   }
 
   public List<String> getProductList() {
