@@ -1,5 +1,10 @@
 package com.ssandri.stepdefinitions;
 
+import static io.qameta.allure.aspects.AttachmentsAspects.getLifecycle;
+import static java.time.LocalDateTime.now;
+import static java.time.format.DateTimeFormatter.ofPattern;
+import static org.openqa.selenium.OutputType.BYTES;
+
 import com.ssandri.dto.CostumerInfo;
 import com.ssandri.dto.CreditCardInfo;
 import com.ssandri.dto.OrderInfo;
@@ -10,6 +15,7 @@ import com.ssandri.pages.ProductDetailsPage;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.DataTableType;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.But;
@@ -19,6 +25,7 @@ import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.asserts.SoftAssert;
 
@@ -109,7 +116,6 @@ public class StoreSteps {
     softAssert.assertTrue(checkoutPage.isOrderConfirmationMsgDisplayed());
 
     OrderInfo orderInfo = checkoutPage.getConfirmationMessage();
-
     softAssert.assertTrue(orderInfo.getAmount().contains(cartTotalCost));
     softAssert.assertAll();
 
@@ -117,8 +123,15 @@ public class StoreSteps {
   }
 
   @After
-  public void tearDownScenarios() {
+  public void tearDownScenarios(Scenario scenario) {
 
+    if (scenario.isFailed()) {
+      String screenshotName = now().format(ofPattern("dd-MMM-yy_hh:mm:ss"));
+      String screenshotContentType = "image/png";
+      String screenshotFileExtension = "png";
+      byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
+      getLifecycle().addAttachment(screenshotName, screenshotContentType, screenshotFileExtension, screenshot);
+    }
     driver.close();
   }
 
