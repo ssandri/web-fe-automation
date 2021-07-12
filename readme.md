@@ -81,7 +81,7 @@ To generate the execution report execute, after running the test, the following 
   gradlew.bat allureServe
 ```
 
-This command will open a report in your system default browser containing a detailed reportfor the execution, all faling
-test will have attached a screenshot under the After step.
+This command will open a report in your system default browser containing a detailed report for the execution, all
+failing test will have attached a screenshot under the After step.
 
 In order to end the command simply input ``TRL+C` in your terminal.
