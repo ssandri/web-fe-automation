@@ -25,6 +25,8 @@ You can download the lastest Google Chrome from [here](https://www.google.com/in
 
 Once you have clone the repository, open a terminal and run the following commands in the root project folder:
 
+### MacOS / Linux
+
 ```bash
   ./gradlew clean build
 ```
@@ -33,12 +35,30 @@ Once you have clone the repository, open a terminal and run the following comman
   ./gradlew downloadAllure
 ```
 
+### Windows
+
+```bash
+  gradlew.bat clean build
+```
+
+```bash
+  gradlew.bat downloadAllure
+```
+
 ## Running Tests
 
 To run tests, run the following command
 
+### MacOS / Linux
+
 ```bash
   ./gradlew clean executeScenarios
+```
+
+### Windows
+
+```bash
+  gradlew.bat clean executeScenarios
 ```
 
 ### Logs
@@ -49,8 +69,16 @@ Each test scenarios execution will generate a log file inside the folder `logs`
 
 To generate the execution report execute, after running the test, the following command:
 
+### MacOS / Linux
+
 ```bash
   ./gradlew allureServe
+```
+
+### Windows
+
+```bash
+  gradlew.bat allureServe
 ```
 
 This command will open a report in your system default browser containing a detailed reportfor the execution, all faling
