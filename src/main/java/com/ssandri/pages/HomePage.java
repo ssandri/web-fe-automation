@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,12 +45,8 @@ public class HomePage extends BasePage {
   }
 
   public void openProductDetailsPage(String productName) {
-
-    productTitleList.stream()
-        .filter(webElement -> webElement.getText().equalsIgnoreCase(productName)).findFirst()
-        .orElseThrow(() -> new NoSuchElementException(
-            format("Cannot locate a product named '%s' in product list.", productName))).click();
-
+    
+    driver.findElement(By.linkText(productName)).click();
     super.waitForPageToLoad();
 
     LOGGER.info("Product '{}' page successfully loaded.", productName);

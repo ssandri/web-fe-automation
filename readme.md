@@ -6,8 +6,8 @@ This projects needs the Java JDK 11, Gradle and Chrome to execute the test scena
 
 ### AdoptOpenJDK11
 
-You can download the AdoptOpenJDK11 for your system [here](https://adoptopenjdk.net/). Also you can find the
-installation steps for your operative system [here](https://adoptopenjdk.net/installation.html).
+You can download the AdoptOpenJDK11 (with HotSpot JVM) for your system [here](https://adoptopenjdk.net/). Also you can
+find the installation steps for your operative system [here](https://adoptopenjdk.net/installation.html).
 
 ### Gradle
 
@@ -56,4 +56,4 @@ To generate the execution report execute, after running the test, the following 
 This command will open a report in your system default browser containing a detailed reportfor the execution, all faling
 test will have attached a screenshot under the After step.
 
-In order to end the command simply input `CTRL+C` in your terminal.
+In order to end the command simply input ``TRL+C` in your terminal.

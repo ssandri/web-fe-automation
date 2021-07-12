@@ -74,7 +74,7 @@ public class CheckoutPage extends BasePage {
   public OrderInfo getConfirmationMessage() {
 
     String orderConfirmationText = confirmationMsgTxt.getText();
-    Map<String, String> orderConfirmationMap = stream(orderConfirmationText.split(System.lineSeparator()))
+    Map<String, String> orderConfirmationMap = stream(orderConfirmationText.split("\n"))
         .map(s -> s.split(": "))
         .collect(Collectors.toMap(e -> e[0], e -> e[1]));
 
