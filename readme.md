@@ -84,4 +84,4 @@ To generate the execution report execute, after running the test, the following 
 This command will open a report in your system default browser containing a detailed report for the execution, all
 failing test will have attached a screenshot under the After step.
 
-In order to end the command simply input ``TRL+C` in your terminal.
+In order to end the command simply input `CTRL+C` in your terminal.
